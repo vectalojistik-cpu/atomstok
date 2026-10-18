@@ -1,0 +1,538 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f47a20">
+<title>ATOM Stok</title>
+<style>
+:root{
+  --orange:#f47a20;--orange2:#ff9a4d;--ink:#171717;--muted:#737783;
+  --bg:#f5f6f8;--card:#fff;--line:#e8e9ed;--danger:#d93c3c;--ok:#16885b;
+  --shadow:0 10px 30px rgba(18,22,33,.07)
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:var(--ink);background:var(--bg)}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+.shell{min-height:100vh}
+.header{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.header-in{max-width:1280px;margin:auto;padding:13px 18px;display:flex;align-items:center;gap:10px}
+.logo{display:flex;align-items:center;gap:10px;margin-right:auto}
+.logo-mark{width:40px;height:40px;border-radius:12px;background:linear-gradient(145deg,var(--orange),var(--orange2));display:grid;place-items:center;color:white;font-weight:950;box-shadow:0 7px 18px rgba(244,122,32,.24)}
+.logo-text{font-size:19px;font-weight:900;letter-spacing:-.4px}.logo-text small{display:block;font-size:10px;letter-spacing:1.5px;color:var(--muted);font-weight:800}
+.head-actions{display:flex;gap:8px;align-items:center}
+.btn{border:0;border-radius:11px;padding:10px 13px;font-weight:800;background:#111;color:#fff;transition:.15s ease;white-space:nowrap}
+.btn:hover{transform:translateY(-1px)}
+.btn.orange{background:var(--orange)}
+.btn.soft{background:#fff;color:#222;border:1px solid var(--line)}
+.btn.danger{background:#fff0f0;color:var(--danger);border:1px solid #ffd0d0}
+.icon-btn{width:42px;height:42px;padding:0;display:grid;place-items:center;border-radius:12px}
+.dot{width:8px;height:8px;border-radius:50%;background:#b4b7bf;margin-right:4px;display:inline-block}
+.dot.on{background:#23aa70;box-shadow:0 0 0 4px #23aa7020}
+main{max-width:1280px;margin:auto;padding:22px 18px 60px}
+.hero{background:linear-gradient(135deg,#171717 0%,#252525 64%,#3d2b20 100%);border-radius:22px;padding:24px;color:#fff;display:flex;align-items:center;gap:22px;box-shadow:var(--shadow);overflow:hidden;position:relative}
+.hero:after{content:"";position:absolute;width:260px;height:260px;border-radius:50%;right:-80px;top:-100px;background:rgba(244,122,32,.28);filter:blur(2px)}
+.hero-copy{position:relative;z-index:2;flex:1}
+.hero h1{margin:0 0 7px;font-size:clamp(25px,4vw,42px);line-height:1.05;letter-spacing:-1.5px}
+.hero p{margin:0;color:#d7d7d7;max-width:650px;line-height:1.55}
+.hero-tools{position:relative;z-index:2;display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}
+.stat{background:#fff;border:1px solid var(--line);border-radius:16px;padding:17px;box-shadow:0 5px 18px rgba(0,0,0,.025)}
+.stat span{display:block;color:var(--muted);font-size:12px;font-weight:750;margin-bottom:5px}
+.stat strong{font-size:27px;letter-spacing:-1px}
+.toolbar{display:grid;grid-template-columns:minmax(220px,1fr) auto auto;gap:10px;margin:16px 0}
+.search{position:relative}
+.search input{width:100%;height:46px;border:1px solid var(--line);border-radius:13px;background:#fff;padding:0 15px 0 43px;outline:none}
+.search input:focus{border-color:#ffc79d;box-shadow:0 0 0 4px #f47a2014}
+.search:before{content:"⌕";position:absolute;left:15px;top:9px;font-size:24px;color:#8b8e96}
+select{height:46px;border:1px solid var(--line);border-radius:13px;background:#fff;padding:0 36px 0 13px;outline:none}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(245px,1fr));gap:14px}
+.card{background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 5px 18px rgba(17,17,17,.025);transition:.16s ease}
+.card:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(17,17,17,.07)}
+.photo{aspect-ratio:4/3;background:linear-gradient(145deg,#f0f1f3,#fafafa);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.photo img{width:100%;height:100%;object-fit:cover;display:block}
+.no-photo{text-align:center;color:#9a9da5;font-size:12px;font-weight:750}.no-photo b{display:block;font-size:30px;margin-bottom:4px;opacity:.55}
+.badge{position:absolute;right:10px;top:10px;background:rgba(255,255,255,.94);backdrop-filter:blur(6px);border:1px solid #ffffffd0;border-radius:999px;padding:5px 8px;font-size:10px;font-weight:900}
+.badge.empty{color:var(--danger)} .badge.low{color:#b56600}.badge.ok{color:var(--ok)}
+.card-body{padding:14px}
+.product-name{font-weight:900;font-size:17px;line-height:1.25;min-height:43px;letter-spacing:-.2px}
+.location{display:flex;gap:6px;flex-wrap:wrap;margin:9px 0 12px}
+.tag{font-size:10px;font-weight:800;color:#676b75;background:#f4f5f7;border-radius:7px;padding:5px 7px}
+.stock-line{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--line);padding-top:12px}
+.stock-num{display:flex;align-items:baseline;gap:5px}.stock-num strong{font-size:29px;letter-spacing:-1.3px}.stock-num span{font-size:11px;color:var(--muted);font-weight:700}
+.counter{display:flex;align-items:center;gap:7px}
+.count-btn{width:38px;height:38px;border-radius:11px;border:0;font-size:22px;font-weight:800;line-height:1}
+.count-btn.minus{background:#f1f2f4;color:#222}.count-btn.plus{background:var(--orange);color:#fff}
+.edit-btn{width:100%;margin-top:10px;border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px;font-weight:800;color:#555}
+.empty-state{grid-column:1/-1;background:#fff;border:1px dashed #cfd2d8;border-radius:18px;padding:50px 20px;text-align:center;color:var(--muted)}
+.more-wrap{text-align:center;margin:22px 0}
+.overlay{position:fixed;inset:0;background:rgba(10,10,12,.62);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:18px;z-index:100}
+.modal{width:min(560px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:20px;box-shadow:0 30px 100px #0006}
+.modal-head{padding:20px 20px 10px}.modal-head h2{margin:0;font-size:23px;letter-spacing:-.6px}.modal-head p{margin:6px 0 0;color:var(--muted);font-size:13px;line-height:1.5}
+.modal-body{padding:12px 20px 20px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.field{margin-bottom:10px}.field.full{grid-column:1/-1}
+.field label{display:block;font-size:11px;color:#686c75;font-weight:850;margin:0 0 6px}
+.field input,.field select{width:100%;height:44px;border:1px solid var(--line);border-radius:11px;padding:0 12px;background:#fff;outline:none}
+.field input:focus,.field select:focus{border-color:#ffc79d;box-shadow:0 0 0 3px #f47a2012}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;padding-top:8px}
+.setup-box{background:#fff7f0;border:1px solid #ffe0c8;border-radius:12px;padding:12px;font-size:12px;line-height:1.5;color:#75441f;margin-bottom:13px}
+.toast-wrap{position:fixed;right:16px;bottom:16px;z-index:200;display:flex;flex-direction:column;gap:8px}
+.toast{background:#171717;color:#fff;padding:12px 14px;border-radius:12px;box-shadow:0 12px 30px #0004;font-size:13px;animation:in .18s ease}
+.toast.error{background:#b72f2f}
+@keyframes in{from{opacity:0;transform:translateY(8px)}}
+.spinner{width:21px;height:21px;border:3px solid #ddd;border-top-color:var(--orange);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-screen{position:fixed;inset:0;background:#ffffffd9;backdrop-filter:blur(4px);z-index:90;display:flex;align-items:center;justify-content:center;gap:10px;font-weight:800}
+.log-list{display:flex;flex-direction:column;gap:8px}
+.log-item{border:1px solid var(--line);border-radius:12px;padding:11px 12px}
+.log-top{display:flex;justify-content:space-between;gap:10px;font-size:12px;color:var(--muted);margin-bottom:4px}
+.log-item b{font-size:13px}.log-item small{display:block;color:#777;margin-top:3px}
+@media(max-width:780px){
+  .header-in{align-items:flex-start}.head-actions{margin-left:auto}.head-actions .label{display:none}
+  .hero{display:block}.hero-tools{margin-top:15px;justify-content:flex-start}
+  .stats{grid-template-columns:1fr 1fr}
+  .toolbar{grid-template-columns:1fr 1fr}.search{grid-column:1/-1}
+}
+@media(max-width:520px){
+  .logo-text small{display:none}.header-in{padding:10px 12px}.logo-mark{width:36px;height:36px}
+  main{padding:14px 12px 50px}.hero{padding:18px;border-radius:17px}.hero h1{font-size:28px}
+  .stats{gap:8px}.stat{padding:13px}.stat strong{font-size:22px}
+  .grid{grid-template-columns:1fr 1fr;gap:9px}
+  .card{border-radius:14px}.card-body{padding:10px}.product-name{font-size:14px;min-height:36px}
+  .photo{aspect-ratio:1/1}.location{margin:7px 0 9px}.tag{font-size:9px;padding:4px 5px}
+  .stock-num strong{font-size:23px}.count-btn{width:33px;height:33px;border-radius:9px}
+  .fields{grid-template-columns:1fr}.field.full{grid-column:auto}
+  .btn{padding:9px 10px}.head-actions{gap:5px}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="header">
+    <div class="header-in">
+      <div class="logo">
+        <div class="logo-mark">A</div>
+        <div class="logo-text">ATOM Stok<small>ONLINE STOK YÖNETİMİ</small></div>
+      </div>
+      <div class="head-actions">
+        <button class="btn soft" onclick="openDrive()" title="Drive fotoğraf klasörü"><span class="label">Fotoğraflar</span> ↗</button>
+        <button class="btn soft" onclick="showLogs()" title="Stok hareketleri"><span class="label">Hareketler</span> ☰</button>
+        <button class="btn soft icon-btn" onclick="openSettings()" title="Ayarlar">⚙</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <h1>Stok kontrolü artık tek ekranda.</h1>
+        <p>Ürünü bul, stoktan düş veya ekle. Değişiklik tüm cihazlarda aynı anda Google Sheet’e kaydolur; fotoğraflar Google Drive klasöründen gelir.</p>
+      </div>
+      <div class="hero-tools">
+        <button class="btn orange" onclick="openProduct()">+ Yeni Ürün</button>
+        <button class="btn soft" onclick="syncPhotos()">Drive Fotoğraflarını Eşleştir</button>
+      </div>
+    </section>
+
+    <section class="stats">
+      <div class="stat"><span>TOPLAM ÜRÜN</span><strong id="sProducts">–</strong></div>
+      <div class="stat"><span>TOPLAM STOK</span><strong id="sUnits">–</strong></div>
+      <div class="stat"><span>KRİTİK ≤ 5</span><strong id="sLow">–</strong></div>
+      <div class="stat"><span>TÜKENEN</span><strong id="sEmpty">–</strong></div>
+    </section>
+
+    <section class="toolbar">
+      <div class="search"><input id="search" autocomplete="off" placeholder="Ürün, GOU, raf veya kutu ara…" oninput="applyFilters()"></div>
+      <select id="filter" onchange="applyFilters()">
+        <option value="all">Tüm ürünler</option>
+        <option value="instock">Stokta</option>
+        <option value="low">Kritik stok</option>
+        <option value="empty">Tükenenler</option>
+        <option value="photo">Fotoğrafı olmayanlar</option>
+      </select>
+      <select id="sort" onchange="applyFilters()">
+        <option value="name">Ada göre</option>
+        <option value="stockasc">Stok: azdan çoğa</option>
+        <option value="stockdesc">Stok: çoktan aza</option>
+      </select>
+    </section>
+
+    <section id="grid" class="grid"></section>
+    <div id="moreWrap" class="more-wrap hidden"><button class="btn soft" onclick="showMore()">Daha fazla göster</button></div>
+  </main>
+</div>
+
+<div id="loading" class="loading-screen hidden"><div class="spinner"></div><span id="loadingText">Yükleniyor…</span></div>
+<div id="toasts" class="toast-wrap"></div>
+
+<!-- Ayarlar -->
+<div id="settingsModal" class="overlay hidden" onclick="backdropClose(event,'settingsModal')">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>Bağlantı Ayarları</h2>
+      <p>Bu bilgiler yalnızca bu tarayıcıda saklanır; GitHub dosyanın içine yazılmaz.</p>
+    </div>
+    <div class="modal-body">
+      <div class="setup-box">
+        Google Apps Script’i bir kez “Web uygulaması” olarak yayınla. Oluşan <b>/exec</b> adresini buraya yapıştır. Bundan sonra GitHub’daki sayfa doğrudan stok sistemine bağlanır.
+      </div>
+      <div class="field"><label>APPS SCRIPT WEB UYGULAMASI URL</label><input id="backendUrl" placeholder="https://script.google.com/macros/s/.../exec"></div>
+      <div class="fields">
+        <div class="field"><label>PIN</label><input id="pin" type="password" inputmode="numeric" placeholder="6 haneli PIN"></div>
+        <div class="field"><label>KULLANICI ADI</label><input id="actor" placeholder="Örn. Özhan"></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn soft" onclick="hide('settingsModal')">Kapat</button>
+        <button class="btn orange" onclick="saveSettings()">Bağlan ve Kaydet</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Ürün -->
+<div id="productModal" class="overlay hidden" onclick="backdropClose(event,'productModal')">
+  <div class="modal">
+    <div class="modal-head">
+      <h2 id="productTitle">Ürün</h2>
+      <p>Ürün adı, konumu ve stok miktarını buradan değiştirebilirsin.</p>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="pId">
+      <div class="field"><label>ÜRÜN ADI</label><input id="pName"></div>
+      <div class="fields">
+        <div class="field"><label>GOU</label><input id="pGou"></div>
+        <div class="field"><label>RAF</label><input id="pRaf"></div>
+        <div class="field"><label>KUTU</label><input id="pKutu"></div>
+        <div class="field"><label>STOK</label><input id="pStock" type="number" step="0.01" min="0"></div>
+        <div class="field"><label>ÖLÇÜ</label><input id="pUnit" placeholder="Adet"></div>
+        <div class="field"><label>DURUM</label><input id="pStatus" placeholder="Stokta"></div>
+      </div>
+      <div class="setup-box">Fotoğraf için Drive’daki dosyanın adını ürün adıyla aynı yapıp üstteki <b>Drive Fotoğraflarını Eşleştir</b> butonuna bas.</div>
+      <div class="modal-actions" style="justify-content:space-between">
+        <button id="deleteButton" class="btn danger hidden" onclick="deleteProduct()">Ürünü Sil</button>
+        <div style="display:flex;gap:8px;margin-left:auto">
+          <button class="btn soft" onclick="hide('productModal')">Vazgeç</button>
+          <button class="btn orange" onclick="saveProduct()">Kaydet</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Hareketler -->
+<div id="logsModal" class="overlay hidden" onclick="backdropClose(event,'logsModal')">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>Son Stok Hareketleri</h2>
+      <p>Kim, hangi ürüne ne zaman stok ekledi veya düşürdü.</p>
+    </div>
+    <div class="modal-body">
+      <div id="logs" class="log-list"></div>
+      <div class="modal-actions"><button class="btn soft" onclick="hide('logsModal')">Kapat</button></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const DRIVE_FOLDER_URL = 'https://drive.google.com/drive/folders/1onGehP5Tv3iMq4u1BlJzCaG9gtSE_YDB';
+const PAGE_SIZE = 60;
+let products = [];
+let filtered = [];
+let visible = PAGE_SIZE;
+let dbUrl = '';
+
+const $ = id => document.getElementById(id);
+const cfg = () => ({
+  url: localStorage.getItem('atom_backend') || '',
+  pin: localStorage.getItem('atom_pin') || '',
+  actor: localStorage.getItem('atom_actor') || 'Kullanıcı'
+});
+
+function show(id){ $(id).classList.remove('hidden') }
+function hide(id){ $(id).classList.add('hidden') }
+function backdropClose(e,id){ if(e.target.id===id) hide(id) }
+function busy(on,text='Yükleniyor…'){ $('loadingText').textContent=text; $('loading').classList.toggle('hidden',!on) }
+
+function toast(msg,type=''){
+  const d=document.createElement('div');
+  d.className='toast '+type; d.textContent=msg; $('toasts').appendChild(d);
+  setTimeout(()=>d.remove(),2800);
+}
+
+function api(action, params={}){
+  return new Promise((resolve,reject)=>{
+    const c=cfg();
+    if(!c.url){ reject(new Error('Önce bağlantı ayarlarını yap.')); return; }
+
+    const cb='__atom_cb_'+Date.now()+'_'+Math.floor(Math.random()*100000);
+    const script=document.createElement('script');
+    const q=new URLSearchParams({
+      action, pin:c.pin, actor:c.actor, callback:cb, _t:String(Date.now())
+    });
+    Object.entries(params).forEach(([k,v])=>q.set(k,String(v)));
+
+    window[cb]=res=>{
+      cleanup();
+      if(res && res.ok) resolve(res.data);
+      else reject(new Error(res && res.error ? res.error : 'İşlem başarısız.'));
+    };
+
+    function cleanup(){
+      try{ delete window[cb] }catch(e){ window[cb]=undefined }
+      script.remove();
+      clearTimeout(timer);
+    }
+
+    script.onerror=()=>{ cleanup(); reject(new Error('Sunucuya bağlanılamadı. Apps Script adresini kontrol et.')); };
+    const timer=setTimeout(()=>{ cleanup(); reject(new Error('Bağlantı zaman aşımına uğradı.')); },20000);
+
+    script.src=c.url.replace(/\/+$/,'')+'?'+q.toString();
+    document.body.appendChild(script);
+  });
+}
+
+async function boot(){
+  const c=cfg();
+  $('backendUrl').value=c.url; $('pin').value=c.pin; $('actor').value=c.actor==='Kullanıcı'?'':c.actor;
+  if(!c.url || !c.pin){
+    show('settingsModal');
+    renderEmpty('İlk kullanım için bağlantı bilgilerini kaydet.');
+    return;
+  }
+  await refresh();
+}
+
+async function saveSettings(){
+  const url=$('backendUrl').value.trim();
+  const pin=$('pin').value.trim();
+  const actor=$('actor').value.trim() || 'Kullanıcı';
+  if(!url || !pin){ toast('Web uygulaması adresi ve PIN gerekli.','error'); return; }
+
+  localStorage.setItem('atom_backend',url);
+  localStorage.setItem('atom_pin',pin);
+  localStorage.setItem('atom_actor',actor);
+
+  busy(true,'Bağlantı kontrol ediliyor…');
+  try{
+    const info=await api('ping');
+    hide('settingsModal');
+    toast('Bağlantı hazır. '+info.count+' ürün bulundu.');
+    await refresh();
+  }catch(e){
+    toast(e.message,'error');
+  }finally{ busy(false) }
+}
+
+function openSettings(){
+  const c=cfg();
+  $('backendUrl').value=c.url; $('pin').value=c.pin; $('actor').value=c.actor==='Kullanıcı'?'':c.actor;
+  show('settingsModal');
+}
+
+async function refresh(){
+  busy(true,'Stoklar getiriliyor…');
+  try{
+    const data=await api('list');
+    products=data.products||[];
+    dbUrl=data.dbUrl||'';
+    $('sProducts').textContent=formatNum(data.stats.products);
+    $('sUnits').textContent=formatNum(data.stats.units);
+    $('sLow').textContent=formatNum(data.stats.low);
+    $('sEmpty').textContent=formatNum(data.stats.empty);
+    applyFilters();
+    document.querySelectorAll('.dot').forEach(x=>x.classList.add('on'));
+  }catch(e){
+    renderEmpty(e.message);
+    toast(e.message,'error');
+  }finally{ busy(false) }
+}
+
+function applyFilters(){
+  const q=normalize($('search').value);
+  const f=$('filter').value;
+  const s=$('sort').value;
+
+  filtered=products.filter(p=>{
+    const hit=!q || normalize([p.urun,p.gou,p.raf,p.kutu,p.durum].join(' ')).includes(q);
+    if(!hit) return false;
+    if(f==='instock') return p.stok>5;
+    if(f==='low') return p.stok>0 && p.stok<=5;
+    if(f==='empty') return p.stok<=0;
+    if(f==='photo') return !p.photoUrl;
+    return true;
+  });
+
+  if(s==='stockasc') filtered.sort((a,b)=>a.stok-b.stok || a.urun.localeCompare(b.urun,'tr'));
+  else if(s==='stockdesc') filtered.sort((a,b)=>b.stok-a.stok || a.urun.localeCompare(b.urun,'tr'));
+  else filtered.sort((a,b)=>a.urun.localeCompare(b.urun,'tr'));
+
+  visible=PAGE_SIZE;
+  render();
+}
+
+function render(){
+  const list=filtered.slice(0,visible);
+  if(!list.length){ renderEmpty('Aradığın ürünü bulamadım.'); return; }
+
+  $('grid').innerHTML=list.map(p=>{
+    const state=p.stok<=0?'empty':p.stok<=5?'low':'ok';
+    const stateText=p.stok<=0?'Tükendi':p.stok<=5?'Kritik':'Stokta';
+    const loc=[
+      p.gou?`GOU ${esc(p.gou)}`:'',
+      p.raf?`Raf ${esc(p.raf)}`:'',
+      p.kutu?`Kutu ${esc(p.kutu)}`:''
+    ].filter(Boolean).map(x=>`<span class="tag">${x}</span>`).join('');
+
+    const photo=p.photoUrl
+      ? `<img loading="lazy" src="${escAttr(p.photoUrl)}" alt="${escAttr(p.urun)}" onerror="photoFail(this)">`
+      : `<div class="no-photo"><b>◫</b>Fotoğraf yok</div>`;
+
+    return `<article class="card" data-id="${escAttr(p.id)}">
+      <div class="photo">${photo}<span class="badge ${state}">${stateText}</span></div>
+      <div class="card-body">
+        <div class="product-name">${esc(p.urun)}</div>
+        <div class="location">${loc || '<span class="tag">Konum yok</span>'}</div>
+        <div class="stock-line">
+          <div class="stock-num"><strong id="stock_${cssSafe(p.id)}">${formatNum(p.stok)}</strong><span>${esc(p.olcu||'')}</span></div>
+          <div class="counter">
+            <button class="count-btn minus" onclick="adjust('${jsq(p.id)}',-1)" aria-label="Stok düş">−</button>
+            <button class="count-btn plus" onclick="adjust('${jsq(p.id)}',1)" aria-label="Stok ekle">+</button>
+          </div>
+        </div>
+        <button class="edit-btn" onclick="openProduct('${jsq(p.id)}')">Düzenle</button>
+      </div>
+    </article>`;
+  }).join('');
+
+  $('moreWrap').classList.toggle('hidden',visible>=filtered.length);
+}
+
+function renderEmpty(msg){
+  $('grid').innerHTML=`<div class="empty-state"><b>${esc(msg)}</b></div>`;
+  $('moreWrap').classList.add('hidden');
+}
+
+function showMore(){ visible+=PAGE_SIZE; render() }
+
+async function adjust(id,delta){
+  const p=products.find(x=>x.id===id); if(!p) return;
+  const old=p.stok;
+  p.stok=Math.max(0,Number(p.stok||0)+delta);
+  applyFilters();
+
+  try{
+    const r=await api('adjust',{id,delta});
+    p.stok=r.stok;
+    p.durum=r.durum;
+    refreshStatsLocal();
+    applyFilters();
+    toast(delta>0 ? 'Stok eklendi.' : 'Stok düşüldü.');
+  }catch(e){
+    p.stok=old;
+    applyFilters();
+    toast(e.message,'error');
+  }
+}
+
+function refreshStatsLocal(){
+  $('sProducts').textContent=formatNum(products.length);
+  $('sUnits').textContent=formatNum(products.reduce((s,p)=>s+Number(p.stok||0),0));
+  $('sLow').textContent=formatNum(products.filter(p=>p.stok>0&&p.stok<=5).length);
+  $('sEmpty').textContent=formatNum(products.filter(p=>p.stok<=0).length);
+}
+
+function openProduct(id=''){
+  const p=id?products.find(x=>x.id===id):null;
+  $('productTitle').textContent=p?'Ürünü Düzenle':'Yeni Ürün';
+  $('pId').value=p?p.id:'';
+  $('pName').value=p?p.urun:'';
+  $('pGou').value=p?p.gou:'';
+  $('pRaf').value=p?p.raf:'';
+  $('pKutu').value=p?p.kutu:'';
+  $('pStock').value=p?p.stok:0;
+  $('pUnit').value=p?p.olcu:'Adet';
+  $('pStatus').value=p?p.durum:'Stokta';
+  $('deleteButton').classList.toggle('hidden',!p);
+  show('productModal');
+}
+
+async function saveProduct(){
+  const p={
+    id:$('pId').value,
+    urun:$('pName').value.trim(),
+    gou:$('pGou').value.trim(),
+    raf:$('pRaf').value.trim(),
+    kutu:$('pKutu').value.trim(),
+    stok:$('pStock').value,
+    olcu:$('pUnit').value.trim(),
+    durum:$('pStatus').value.trim()
+  };
+  if(!p.urun){ toast('Ürün adı gerekli.','error'); return; }
+
+  busy(true,'Kaydediliyor…');
+  try{
+    if(p.id) await api('save',{payload:JSON.stringify(p)});
+    else await api('add',{payload:JSON.stringify(p)});
+    hide('productModal');
+    toast('Ürün kaydedildi.');
+    await refresh();
+  }catch(e){ toast(e.message,'error') }
+  finally{ busy(false) }
+}
+
+async function deleteProduct(){
+  const id=$('pId').value;
+  if(!id || !confirm('Bu ürünü silmek istediğine emin misin?')) return;
+  busy(true,'Ürün siliniyor…');
+  try{
+    await api('delete',{id});
+    hide('productModal'); toast('Ürün silindi.'); await refresh();
+  }catch(e){ toast(e.message,'error') }
+  finally{ busy(false) }
+}
+
+async function syncPhotos(){
+  if(!cfg().url){ openSettings(); return }
+  busy(true,'Drive fotoğrafları eşleştiriliyor…');
+  try{
+    const r=await api('sync_photos');
+    let msg=`${r.matched} fotoğraf ürünlerle eşleşti.`;
+    if(r.unmatched && r.unmatched.length) msg+=` ${r.unmatched.length} dosya adı eşleşmedi.`;
+    toast(msg);
+    await refresh();
+  }catch(e){ toast(e.message,'error') }
+  finally{ busy(false) }
+}
+
+async function showLogs(){
+  busy(true,'Hareketler getiriliyor…');
+  try{
+    const logs=await api('recent',{limit:50});
+    $('logs').innerHTML=logs.length?logs.map(x=>`
+      <div class="log-item">
+        <div class="log-top"><span>${esc(dateTR(x.tarih))}</span><span>${esc(x.kullanici||'Kullanıcı')}</span></div>
+        <b>${esc(x.urun)}</b>
+        <small>${esc(x.islem)}${x.miktar?` · ${formatNum(x.miktar)}`:''} · ${formatNum(x.onceki)} → ${formatNum(x.yeni)}</small>
+      </div>`).join(''):'<div class="empty-state">Henüz hareket yok.</div>';
+    show('logsModal');
+  }catch(e){ toast(e.message,'error') }
+  finally{ busy(false) }
+}
+
+function openDrive(){ window.open(DRIVE_FOLDER_URL,'_blank','noopener') }
+function photoFail(img){ img.outerHTML='<div class="no-photo"><b>◫</b>Fotoğraf açılamadı</div>' }
+function dateTR(v){ try{return new Date(v).toLocaleString('tr-TR',{dateStyle:'short',timeStyle:'short'})}catch(e){return ''} }
+function formatNum(n){ return Number(n||0).toLocaleString('tr-TR',{maximumFractionDigits:2}) }
+function normalize(s){ return String(s||'').toLocaleLowerCase('tr-TR').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/ı/g,'i').replace(/[^a-z0-9]+/g,' ').trim() }
+function cssSafe(s){ return String(s).replace(/[^A-Za-z0-9_-]/g,'_') }
+function jsq(s){ return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'") }
+function esc(s){ return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c])) }
+function escAttr(s){ return esc(s).replace(/`/g,'&#096;') }
+
+boot();
+</script>
+</body>
+</html>
