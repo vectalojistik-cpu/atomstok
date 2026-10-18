@@ -3,124 +3,323 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#f47a20">
+<meta name="theme-color" content="#ff7a1a">
 <title>ATOM Stok</title>
 <style>
 :root{
-  --orange:#f47a20;--orange2:#ff9a4d;--ink:#171717;--muted:#737783;
-  --bg:#f5f6f8;--card:#fff;--line:#e8e9ed;--danger:#d93c3c;--ok:#16885b;
-  --shadow:0 10px 30px rgba(18,22,33,.07)
+  --orange:#ff7a1a;
+  --orange-2:#ff9a4d;
+  --orange-soft:#fff1e7;
+  --ink:#17191d;
+  --muted:#747985;
+  --bg:#f4f5f7;
+  --card:#ffffff;
+  --line:#e8eaee;
+  --green:#159b66;
+  --green-soft:#eaf8f2;
+  --red:#db3d47;
+  --red-soft:#fff0f1;
+  --amber:#c37600;
+  --amber-soft:#fff6e7;
+  --shadow:0 18px 48px rgba(25,28,35,.08);
 }
 *{box-sizing:border-box}
-html,body{margin:0;min-height:100%;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:var(--ink);background:var(--bg)}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 0% 0%,rgba(255,122,26,.07),transparent 24rem),
+    var(--bg);
+  font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+}
 button,input,select{font:inherit}
 button{cursor:pointer}
 .hidden{display:none!important}
-.shell{min-height:100vh}
-.header{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
-.header-in{max-width:1280px;margin:auto;padding:13px 18px;display:flex;align-items:center;gap:10px}
-.logo{display:flex;align-items:center;gap:10px;margin-right:auto}
-.logo-mark{width:40px;height:40px;border-radius:12px;background:linear-gradient(145deg,var(--orange),var(--orange2));display:grid;place-items:center;color:white;font-weight:950;box-shadow:0 7px 18px rgba(244,122,32,.24)}
-.logo-text{font-size:19px;font-weight:900;letter-spacing:-.4px}.logo-text small{display:block;font-size:10px;letter-spacing:1.5px;color:var(--muted);font-weight:800}
-.head-actions{display:flex;gap:8px;align-items:center}
-.btn{border:0;border-radius:11px;padding:10px 13px;font-weight:800;background:#111;color:#fff;transition:.15s ease;white-space:nowrap}
+.app{min-height:100vh}
+
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:rgba(255,255,255,.9);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(228,230,235,.85);
+}
+.topbar-inner{
+  max-width:1320px;margin:auto;padding:12px 18px;
+  display:flex;align-items:center;gap:12px;
+}
+.brand{display:flex;align-items:center;gap:11px;margin-right:auto;min-width:0}
+.brand-mark{
+  width:43px;height:43px;border-radius:14px;
+  display:grid;place-items:center;
+  background:linear-gradient(145deg,var(--orange),#ff963d);
+  color:#fff;font-weight:1000;font-size:20px;
+  box-shadow:0 9px 24px rgba(255,122,26,.28);
+}
+.brand-copy{min-width:0}
+.brand-copy strong{display:block;font-size:18px;letter-spacing:-.35px}
+.brand-copy small{display:block;color:var(--muted);font-weight:800;font-size:9px;letter-spacing:1.45px;margin-top:1px}
+.status{
+  display:flex;align-items:center;gap:7px;
+  font-size:11px;font-weight:850;color:var(--muted);
+  padding:8px 10px;border-radius:999px;background:#f6f7f8;border:1px solid var(--line);
+}
+.status i{width:8px;height:8px;border-radius:50%;background:#b7bbc4}
+.status.online i{background:#20aa72;box-shadow:0 0 0 4px rgba(32,170,114,.12)}
+.top-actions{display:flex;gap:7px}
+.btn{
+  appearance:none;border:0;border-radius:12px;
+  min-height:42px;padding:0 14px;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font-weight:850;font-size:13px;
+  transition:transform .16s ease,box-shadow .16s ease,background .16s ease;
+}
 .btn:hover{transform:translateY(-1px)}
-.btn.orange{background:var(--orange)}
-.btn.soft{background:#fff;color:#222;border:1px solid var(--line)}
-.btn.danger{background:#fff0f0;color:var(--danger);border:1px solid #ffd0d0}
-.icon-btn{width:42px;height:42px;padding:0;display:grid;place-items:center;border-radius:12px}
-.dot{width:8px;height:8px;border-radius:50%;background:#b4b7bf;margin-right:4px;display:inline-block}
-.dot.on{background:#23aa70;box-shadow:0 0 0 4px #23aa7020}
-main{max-width:1280px;margin:auto;padding:22px 18px 60px}
-.hero{background:linear-gradient(135deg,#171717 0%,#252525 64%,#3d2b20 100%);border-radius:22px;padding:24px;color:#fff;display:flex;align-items:center;gap:22px;box-shadow:var(--shadow);overflow:hidden;position:relative}
-.hero:after{content:"";position:absolute;width:260px;height:260px;border-radius:50%;right:-80px;top:-100px;background:rgba(244,122,32,.28);filter:blur(2px)}
-.hero-copy{position:relative;z-index:2;flex:1}
-.hero h1{margin:0 0 7px;font-size:clamp(25px,4vw,42px);line-height:1.05;letter-spacing:-1.5px}
-.hero p{margin:0;color:#d7d7d7;max-width:650px;line-height:1.55}
-.hero-tools{position:relative;z-index:2;display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}
-.stat{background:#fff;border:1px solid var(--line);border-radius:16px;padding:17px;box-shadow:0 5px 18px rgba(0,0,0,.025)}
-.stat span{display:block;color:var(--muted);font-size:12px;font-weight:750;margin-bottom:5px}
-.stat strong{font-size:27px;letter-spacing:-1px}
-.toolbar{display:grid;grid-template-columns:minmax(220px,1fr) auto auto;gap:10px;margin:16px 0}
-.search{position:relative}
-.search input{width:100%;height:46px;border:1px solid var(--line);border-radius:13px;background:#fff;padding:0 15px 0 43px;outline:none}
-.search input:focus{border-color:#ffc79d;box-shadow:0 0 0 4px #f47a2014}
-.search:before{content:"⌕";position:absolute;left:15px;top:9px;font-size:24px;color:#8b8e96}
-select{height:46px;border:1px solid var(--line);border-radius:13px;background:#fff;padding:0 36px 0 13px;outline:none}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(245px,1fr));gap:14px}
-.card{background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 5px 18px rgba(17,17,17,.025);transition:.16s ease}
-.card:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(17,17,17,.07)}
-.photo{aspect-ratio:4/3;background:linear-gradient(145deg,#f0f1f3,#fafafa);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.btn:active{transform:translateY(0)}
+.btn-primary{background:var(--orange);color:white;box-shadow:0 8px 18px rgba(255,122,26,.23)}
+.btn-dark{background:#17191d;color:white}
+.btn-white{background:#fff;color:#222;border:1px solid var(--line)}
+.btn-soft{background:#f6f7f9;color:#333;border:1px solid #eef0f3}
+.btn-danger{background:var(--red-soft);color:var(--red);border:1px solid #ffd6da}
+.btn-icon{width:42px;padding:0;font-size:18px}
+
+main{max-width:1320px;margin:auto;padding:22px 18px 70px}
+
+.hero{
+  position:relative;overflow:hidden;
+  min-height:205px;
+  padding:28px;
+  border-radius:24px;
+  background:linear-gradient(125deg,#191b1f 0%,#27292e 68%,#392b22 100%);
+  box-shadow:var(--shadow);
+  color:#fff;
+  display:flex;align-items:flex-end;gap:25px;
+}
+.hero:before{
+  content:"";position:absolute;right:-90px;top:-120px;width:330px;height:330px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,122,26,.45),rgba(255,122,26,0) 70%);
+}
+.hero:after{
+  content:"";position:absolute;right:120px;bottom:-150px;width:300px;height:300px;border-radius:50%;
+  border:50px solid rgba(255,255,255,.035);
+}
+.hero-copy{position:relative;z-index:2;flex:1;max-width:760px}
+.eyebrow{font-size:11px;font-weight:900;letter-spacing:1.6px;color:#ffb47f;margin-bottom:8px}
+.hero h1{margin:0;font-size:clamp(30px,4vw,51px);letter-spacing:-2px;line-height:1.02}
+.hero p{margin:11px 0 0;max-width:680px;color:#d8d9dc;line-height:1.55;font-size:14px}
+.hero-buttons{position:relative;z-index:2;display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end}
+
+.stats{
+  display:grid;grid-template-columns:repeat(5,1fr);gap:11px;margin:15px 0;
+}
+.stat-card{
+  background:rgba(255,255,255,.95);
+  border:1px solid var(--line);border-radius:17px;padding:16px 17px;
+  box-shadow:0 7px 22px rgba(20,22,28,.035);
+}
+.stat-card span{display:block;font-size:10px;font-weight:900;color:var(--muted);letter-spacing:.7px;margin-bottom:5px}
+.stat-card strong{font-size:27px;letter-spacing:-1.2px}
+.stat-card.orange strong{color:var(--orange)}
+.stat-card.red strong{color:var(--red)}
+.stat-card.amber strong{color:var(--amber)}
+.stat-card.green strong{color:var(--green)}
+
+.control-row{
+  display:grid;
+  grid-template-columns:minmax(240px,1fr) auto auto;
+  gap:10px;
+  margin:18px 0 14px;
+}
+.search-wrap{position:relative}
+.search-wrap svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:19px;height:19px;stroke:#8a8f99}
+.search-wrap input{
+  width:100%;height:48px;border:1px solid var(--line);border-radius:14px;background:#fff;
+  outline:none;padding:0 15px 0 45px;color:#222;
+  box-shadow:0 5px 16px rgba(0,0,0,.018);
+}
+.search-wrap input:focus{border-color:#ffc79e;box-shadow:0 0 0 4px rgba(255,122,26,.09)}
+select{
+  height:48px;border:1px solid var(--line);border-radius:14px;background:#fff;color:#333;
+  padding:0 38px 0 13px;outline:none;font-weight:750;font-size:12px;
+}
+
+.product-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(245px,1fr));
+  gap:14px;
+}
+.product-card{
+  overflow:hidden;background:#fff;border:1px solid var(--line);border-radius:19px;
+  box-shadow:0 6px 20px rgba(18,20,28,.035);
+  transition:transform .16s ease,box-shadow .16s ease;
+}
+.product-card:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(18,20,28,.08)}
+.photo{
+  position:relative;
+  aspect-ratio:4/3;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(145deg,#f0f1f3,#fafafa);
+  overflow:hidden;
+}
 .photo img{width:100%;height:100%;object-fit:cover;display:block}
-.no-photo{text-align:center;color:#9a9da5;font-size:12px;font-weight:750}.no-photo b{display:block;font-size:30px;margin-bottom:4px;opacity:.55}
-.badge{position:absolute;right:10px;top:10px;background:rgba(255,255,255,.94);backdrop-filter:blur(6px);border:1px solid #ffffffd0;border-radius:999px;padding:5px 8px;font-size:10px;font-weight:900}
-.badge.empty{color:var(--danger)} .badge.low{color:#b56600}.badge.ok{color:var(--ok)}
+.photo-empty{display:flex;flex-direction:column;align-items:center;gap:7px;color:#a1a5ae;font-size:11px;font-weight:800}
+.photo-empty svg{width:36px;height:36px;stroke:#aeb2bb}
+.badge{
+  position:absolute;top:10px;right:10px;
+  border-radius:999px;padding:5px 8px;
+  font-size:9px;font-weight:950;letter-spacing:.3px;
+  backdrop-filter:blur(8px);
+}
+.badge.ok{background:rgba(235,249,242,.94);color:var(--green);border:1px solid rgba(21,155,102,.13)}
+.badge.low{background:rgba(255,247,230,.95);color:var(--amber);border:1px solid rgba(195,118,0,.15)}
+.badge.empty{background:rgba(255,240,241,.96);color:var(--red);border:1px solid rgba(219,61,71,.15)}
+
 .card-body{padding:14px}
-.product-name{font-weight:900;font-size:17px;line-height:1.25;min-height:43px;letter-spacing:-.2px}
-.location{display:flex;gap:6px;flex-wrap:wrap;margin:9px 0 12px}
-.tag{font-size:10px;font-weight:800;color:#676b75;background:#f4f5f7;border-radius:7px;padding:5px 7px}
-.stock-line{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--line);padding-top:12px}
-.stock-num{display:flex;align-items:baseline;gap:5px}.stock-num strong{font-size:29px;letter-spacing:-1.3px}.stock-num span{font-size:11px;color:var(--muted);font-weight:700}
-.counter{display:flex;align-items:center;gap:7px}
-.count-btn{width:38px;height:38px;border-radius:11px;border:0;font-size:22px;font-weight:800;line-height:1}
-.count-btn.minus{background:#f1f2f4;color:#222}.count-btn.plus{background:var(--orange);color:#fff}
-.edit-btn{width:100%;margin-top:10px;border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px;font-weight:800;color:#555}
-.empty-state{grid-column:1/-1;background:#fff;border:1px dashed #cfd2d8;border-radius:18px;padding:50px 20px;text-align:center;color:var(--muted)}
-.more-wrap{text-align:center;margin:22px 0}
-.overlay{position:fixed;inset:0;background:rgba(10,10,12,.62);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:18px;z-index:100}
-.modal{width:min(560px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:20px;box-shadow:0 30px 100px #0006}
-.modal-head{padding:20px 20px 10px}.modal-head h2{margin:0;font-size:23px;letter-spacing:-.6px}.modal-head p{margin:6px 0 0;color:var(--muted);font-size:13px;line-height:1.5}
-.modal-body{padding:12px 20px 20px}
+.product-name{font-size:16px;font-weight:950;letter-spacing:-.25px;line-height:1.28;min-height:41px}
+.meta{display:flex;flex-wrap:wrap;gap:5px;margin:9px 0 13px}
+.meta-chip{padding:5px 7px;border-radius:8px;background:#f5f6f8;color:#6f7480;font-size:9px;font-weight:850}
+.stock-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:12px;border-top:1px solid var(--line)}
+.stock-value{display:flex;align-items:baseline;gap:5px;min-width:0}
+.stock-value strong{font-size:28px;letter-spacing:-1.5px}
+.stock-value span{font-size:10px;color:var(--muted);font-weight:800}
+.stock-controls{display:flex;gap:6px}
+.stock-btn{
+  width:39px;height:39px;border:0;border-radius:11px;font-size:21px;font-weight:900;
+  display:grid;place-items:center;
+}
+.stock-btn.minus{background:#f2f3f5;color:#24262a}
+.stock-btn.plus{background:var(--orange);color:white;box-shadow:0 7px 15px rgba(255,122,26,.18)}
+.card-actions{display:flex;gap:7px;margin-top:9px}
+.card-actions .btn{flex:1;min-height:37px;padding:0 10px;font-size:11px}
+
+.empty-state{
+  grid-column:1/-1;
+  padding:54px 20px;text-align:center;background:#fff;
+  border:1px dashed #ccd0d8;border-radius:18px;color:var(--muted);
+}
+.more{text-align:center;margin:22px 0}
+
+.overlay{
+  position:fixed;inset:0;z-index:200;
+  display:flex;align-items:center;justify-content:center;
+  padding:18px;background:rgba(10,11,13,.58);backdrop-filter:blur(6px);
+}
+.modal{
+  width:min(580px,100%);max-height:92vh;overflow:auto;
+  background:#fff;border:1px solid rgba(255,255,255,.75);
+  border-radius:22px;box-shadow:0 32px 90px rgba(0,0,0,.36);
+}
+.modal-head{padding:22px 22px 10px}
+.modal-head h2{margin:0;font-size:24px;letter-spacing:-.7px}
+.modal-head p{margin:7px 0 0;color:var(--muted);font-size:12px;line-height:1.55}
+.modal-body{padding:12px 22px 22px}
 .fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.field{margin-bottom:10px}.field.full{grid-column:1/-1}
-.field label{display:block;font-size:11px;color:#686c75;font-weight:850;margin:0 0 6px}
-.field input,.field select{width:100%;height:44px;border:1px solid var(--line);border-radius:11px;padding:0 12px;background:#fff;outline:none}
-.field input:focus,.field select:focus{border-color:#ffc79d;box-shadow:0 0 0 3px #f47a2012}
-.modal-actions{display:flex;gap:8px;justify-content:flex-end;padding-top:8px}
-.setup-box{background:#fff7f0;border:1px solid #ffe0c8;border-radius:12px;padding:12px;font-size:12px;line-height:1.5;color:#75441f;margin-bottom:13px}
-.toast-wrap{position:fixed;right:16px;bottom:16px;z-index:200;display:flex;flex-direction:column;gap:8px}
-.toast{background:#171717;color:#fff;padding:12px 14px;border-radius:12px;box-shadow:0 12px 30px #0004;font-size:13px;animation:in .18s ease}
-.toast.error{background:#b72f2f}
-@keyframes in{from{opacity:0;transform:translateY(8px)}}
-.spinner{width:21px;height:21px;border:3px solid #ddd;border-top-color:var(--orange);border-radius:50%;animation:spin .7s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.loading-screen{position:fixed;inset:0;background:#ffffffd9;backdrop-filter:blur(4px);z-index:90;display:flex;align-items:center;justify-content:center;gap:10px;font-weight:800}
+.field{margin-bottom:10px}
+.field.full{grid-column:1/-1}
+.field label{display:block;margin-bottom:6px;font-size:10px;font-weight:950;color:#6c717c;letter-spacing:.55px}
+.field input,.field select{
+  width:100%;height:44px;border:1px solid var(--line);border-radius:11px;background:#fff;
+  outline:none;padding:0 12px;font-weight:650;
+}
+.field input:focus,.field select:focus{border-color:#ffc89f;box-shadow:0 0 0 3px rgba(255,122,26,.08)}
+.info-box{
+  margin-bottom:12px;padding:12px 13px;border-radius:12px;
+  background:var(--orange-soft);border:1px solid #ffd9be;
+  color:#7a4825;font-size:11px;line-height:1.5;
+}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
+.modal-actions.split{justify-content:space-between}
+
+.connect-test{
+  display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end;
+}
+.test-result{
+  margin-top:10px;padding:10px 12px;border-radius:11px;font-size:11px;font-weight:750;
+}
+.test-result.ok{background:var(--green-soft);color:var(--green)}
+.test-result.bad{background:var(--red-soft);color:var(--red)}
+
 .log-list{display:flex;flex-direction:column;gap:8px}
-.log-item{border:1px solid var(--line);border-radius:12px;padding:11px 12px}
-.log-top{display:flex;justify-content:space-between;gap:10px;font-size:12px;color:var(--muted);margin-bottom:4px}
-.log-item b{font-size:13px}.log-item small{display:block;color:#777;margin-top:3px}
-@media(max-width:780px){
-  .header-in{align-items:flex-start}.head-actions{margin-left:auto}.head-actions .label{display:none}
-  .hero{display:block}.hero-tools{margin-top:15px;justify-content:flex-start}
-  .stats{grid-template-columns:1fr 1fr}
-  .toolbar{grid-template-columns:1fr 1fr}.search{grid-column:1/-1}
+.log-item{border:1px solid var(--line);border-radius:13px;padding:11px 12px;background:#fff}
+.log-top{display:flex;align-items:center;justify-content:space-between;gap:10px;color:var(--muted);font-size:10px;margin-bottom:4px}
+.log-item b{font-size:13px}
+.log-item small{display:block;color:#777;margin-top:4px}
+
+.toast-wrap{position:fixed;right:16px;bottom:16px;z-index:300;display:flex;flex-direction:column;gap:8px}
+.toast{
+  max-width:360px;padding:12px 14px;border-radius:12px;
+  background:#181a1e;color:white;box-shadow:0 15px 35px rgba(0,0,0,.22);
+  font-size:12px;font-weight:750;
+  animation:toastIn .18s ease;
+}
+.toast.error{background:#b9313b}
+.toast.success{background:#15835a}
+@keyframes toastIn{from{opacity:0;transform:translateY(7px)}}
+
+.loading{
+  position:fixed;inset:0;z-index:180;display:flex;align-items:center;justify-content:center;gap:10px;
+  background:rgba(255,255,255,.82);backdrop-filter:blur(5px);font-weight:850;
+}
+.spinner{width:23px;height:23px;border:3px solid #dedfe3;border-top-color:var(--orange);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+#bridgeFrame{position:fixed;width:1px;height:1px;opacity:0;pointer-events:none;border:0;left:-100px;top:-100px}
+
+@media(max-width:900px){
+  .stats{grid-template-columns:repeat(3,1fr)}
+  .stats .stat-card:nth-child(4),.stats .stat-card:nth-child(5){grid-column:auto}
+}
+@media(max-width:760px){
+  .topbar-inner{align-items:center}
+  .status{display:none}
+  .top-actions .txt{display:none}
+  .hero{display:block;min-height:0;padding:22px}
+  .hero-buttons{margin-top:16px;justify-content:flex-start}
+  .control-row{grid-template-columns:1fr 1fr}
+  .search-wrap{grid-column:1/-1}
 }
 @media(max-width:520px){
-  .logo-text small{display:none}.header-in{padding:10px 12px}.logo-mark{width:36px;height:36px}
-  main{padding:14px 12px 50px}.hero{padding:18px;border-radius:17px}.hero h1{font-size:28px}
-  .stats{gap:8px}.stat{padding:13px}.stat strong{font-size:22px}
-  .grid{grid-template-columns:1fr 1fr;gap:9px}
-  .card{border-radius:14px}.card-body{padding:10px}.product-name{font-size:14px;min-height:36px}
-  .photo{aspect-ratio:1/1}.location{margin:7px 0 9px}.tag{font-size:9px;padding:4px 5px}
-  .stock-num strong{font-size:23px}.count-btn{width:33px;height:33px;border-radius:9px}
+  .topbar-inner{padding:9px 11px}.brand-mark{width:38px;height:38px;border-radius:12px}
+  .brand-copy strong{font-size:16px}.brand-copy small{display:none}
+  .top-actions{gap:5px}.btn-icon{width:38px;min-height:38px}
+  main{padding:13px 11px 55px}
+  .hero{border-radius:18px;padding:19px}.hero h1{font-size:30px;letter-spacing:-1.4px}.hero p{font-size:12px}
+  .hero-buttons .btn{flex:1}
+  .stats{grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
+  .stat-card{padding:12px 13px;border-radius:14px}.stat-card strong{font-size:22px}
+  .stat-card:nth-child(5){grid-column:1/-1}
+  .control-row{gap:8px;margin-top:12px}
+  .product-grid{grid-template-columns:1fr 1fr;gap:9px}
+  .product-card{border-radius:15px}.photo{aspect-ratio:1/1}.card-body{padding:10px}
+  .product-name{font-size:13px;min-height:34px}.meta{margin:7px 0 9px}
+  .meta-chip{font-size:8px;padding:4px 5px}
+  .stock-value strong{font-size:23px}.stock-btn{width:34px;height:34px;border-radius:9px}
+  .card-actions .btn{min-height:34px}
   .fields{grid-template-columns:1fr}.field.full{grid-column:auto}
-  .btn{padding:9px 10px}.head-actions{gap:5px}
+  .modal{border-radius:18px}.modal-head{padding:18px 17px 8px}.modal-body{padding:10px 17px 17px}
 }
 </style>
 </head>
 <body>
-<div class="shell">
-  <header class="header">
-    <div class="header-in">
-      <div class="logo">
-        <div class="logo-mark">A</div>
-        <div class="logo-text">ATOM Stok<small>ONLINE STOK YÖNETİMİ</small></div>
+<iframe id="bridgeFrame" title="ATOM stok bağlantısı"></iframe>
+
+<div class="app">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="brand-mark">A</div>
+        <div class="brand-copy">
+          <strong>ATOM Stok</strong>
+          <small>ONLINE STOK YÖNETİMİ</small>
+        </div>
       </div>
-      <div class="head-actions">
-        <button class="btn soft" onclick="openDrive()" title="Drive fotoğraf klasörü"><span class="label">Fotoğraflar</span> ↗</button>
-        <button class="btn soft" onclick="showLogs()" title="Stok hareketleri"><span class="label">Hareketler</span> ☰</button>
-        <button class="btn soft icon-btn" onclick="openSettings()" title="Ayarlar">⚙</button>
+
+      <div id="connectionStatus" class="status"><i></i><span>Bağlantı bekleniyor</span></div>
+
+      <div class="top-actions">
+        <button class="btn btn-white btn-icon" onclick="openDrive()" title="Drive fotoğrafları">▧</button>
+        <button class="btn btn-white" onclick="showLogs()"><span class="txt">Hareketler</span> ☰</button>
+        <button class="btn btn-white btn-icon" onclick="openSettings()" title="Ayarlar">⚙</button>
       </div>
     </div>
   </header>
@@ -128,24 +327,30 @@ select{height:46px;border:1px solid var(--line);border-radius:13px;background:#f
   <main>
     <section class="hero">
       <div class="hero-copy">
-        <h1>Stok kontrolü artık tek ekranda.</h1>
-        <p>Ürünü bul, stoktan düş veya ekle. Değişiklik tüm cihazlarda aynı anda Google Sheet’e kaydolur; fotoğraflar Google Drive klasöründen gelir.</p>
+        <div class="eyebrow">ATOM SCHOOL & WORKSHOPS</div>
+        <h1>Stoklar tek ekranda, kontrol sende.</h1>
+        <p>Ürünü ara, stok ekle veya düş. Her değişiklik Google Sheet’e kaydolur; ürün fotoğrafları Google Drive klasöründen otomatik eşleşir.</p>
       </div>
-      <div class="hero-tools">
-        <button class="btn orange" onclick="openProduct()">+ Yeni Ürün</button>
-        <button class="btn soft" onclick="syncPhotos()">Drive Fotoğraflarını Eşleştir</button>
+      <div class="hero-buttons">
+        <button class="btn btn-primary" onclick="openProduct()">＋ Yeni Ürün</button>
+        <button class="btn btn-white" onclick="syncPhotos()">▧ Fotoğrafları Eşleştir</button>
       </div>
     </section>
 
     <section class="stats">
-      <div class="stat"><span>TOPLAM ÜRÜN</span><strong id="sProducts">–</strong></div>
-      <div class="stat"><span>TOPLAM STOK</span><strong id="sUnits">–</strong></div>
-      <div class="stat"><span>KRİTİK ≤ 5</span><strong id="sLow">–</strong></div>
-      <div class="stat"><span>TÜKENEN</span><strong id="sEmpty">–</strong></div>
+      <div class="stat-card orange"><span>TOPLAM ÜRÜN</span><strong id="statProducts">–</strong></div>
+      <div class="stat-card"><span>TOPLAM STOK</span><strong id="statUnits">–</strong></div>
+      <div class="stat-card amber"><span>KRİTİK ≤ 5</span><strong id="statLow">–</strong></div>
+      <div class="stat-card red"><span>TÜKENEN</span><strong id="statEmpty">–</strong></div>
+      <div class="stat-card green"><span>FOTOĞRAFLI</span><strong id="statPhotos">–</strong></div>
     </section>
 
-    <section class="toolbar">
-      <div class="search"><input id="search" autocomplete="off" placeholder="Ürün, GOU, raf veya kutu ara…" oninput="applyFilters()"></div>
+    <section class="control-row">
+      <div class="search-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg>
+        <input id="search" placeholder="Ürün, GOU, raf veya kutu ara…" autocomplete="off" oninput="applyFilters()">
+      </div>
+
       <select id="filter" onchange="applyFilters()">
         <option value="all">Tüm ürünler</option>
         <option value="instock">Stokta</option>
@@ -153,6 +358,7 @@ select{height:46px;border:1px solid var(--line);border-radius:13px;background:#f
         <option value="empty">Tükenenler</option>
         <option value="photo">Fotoğrafı olmayanlar</option>
       </select>
+
       <select id="sort" onchange="applyFilters()">
         <option value="name">Ada göre</option>
         <option value="stockasc">Stok: azdan çoğa</option>
@@ -160,70 +366,98 @@ select{height:46px;border:1px solid var(--line);border-radius:13px;background:#f
       </select>
     </section>
 
-    <section id="grid" class="grid"></section>
-    <div id="moreWrap" class="more-wrap hidden"><button class="btn soft" onclick="showMore()">Daha fazla göster</button></div>
+    <section id="productGrid" class="product-grid"></section>
+    <div id="moreWrap" class="more hidden"><button class="btn btn-white" onclick="showMore()">Daha fazla göster</button></div>
   </main>
 </div>
 
-<div id="loading" class="loading-screen hidden"><div class="spinner"></div><span id="loadingText">Yükleniyor…</span></div>
+<div id="loading" class="loading hidden"><div class="spinner"></div><span id="loadingText">Yükleniyor…</span></div>
 <div id="toasts" class="toast-wrap"></div>
 
-<!-- Ayarlar -->
-<div id="settingsModal" class="overlay hidden" onclick="backdropClose(event,'settingsModal')">
+<!-- Connection/settings -->
+<div id="settingsModal" class="overlay hidden" onclick="closeBackdrop(event,'settingsModal')">
   <div class="modal">
     <div class="modal-head">
       <h2>Bağlantı Ayarları</h2>
-      <p>Bu bilgiler yalnızca bu tarayıcıda saklanır; GitHub dosyanın içine yazılmaz.</p>
+      <p>Apps Script web uygulamasının <b>/exec</b> adresini bir kez kaydet. Sonraki açılışlarda otomatik bağlanır.</p>
     </div>
     <div class="modal-body">
-      <div class="setup-box">
-        Google Apps Script’i bir kez “Web uygulaması” olarak yayınla. Oluşan <b>/exec</b> adresini buraya yapıştır. Bundan sonra GitHub’daki sayfa doğrudan stok sistemine bağlanır.
+      <div class="info-box">
+        Yeni sürüm doğrudan API çağrısı yapmaz. Apps Script sayfasını görünmez bir köprü olarak açar; bu yüzden GitHub ↔ Google bağlantısı önceki sürüme göre daha kararlıdır.
       </div>
-      <div class="field"><label>APPS SCRIPT WEB UYGULAMASI URL</label><input id="backendUrl" placeholder="https://script.google.com/macros/s/.../exec"></div>
+
+      <div class="field">
+        <label>APPS SCRIPT WEB UYGULAMASI URL</label>
+        <input id="backendUrl" placeholder="https://script.google.com/macros/s/.../exec">
+      </div>
+
       <div class="fields">
-        <div class="field"><label>PIN</label><input id="pin" type="password" inputmode="numeric" placeholder="6 haneli PIN"></div>
-        <div class="field"><label>KULLANICI ADI</label><input id="actor" placeholder="Örn. Özhan"></div>
+        <div class="field">
+          <label>PIN</label>
+          <input id="pin" type="password" inputmode="numeric" placeholder="383757">
+        </div>
+        <div class="field">
+          <label>KULLANICI ADI</label>
+          <input id="actor" placeholder="Örn. Özhan">
+        </div>
       </div>
+
+      <div class="connect-test">
+        <div>
+          <div id="testResult" class="test-result hidden"></div>
+        </div>
+        <button class="btn btn-dark" onclick="testConnection()">Bağlantıyı Test Et</button>
+      </div>
+
       <div class="modal-actions">
-        <button class="btn soft" onclick="hide('settingsModal')">Kapat</button>
-        <button class="btn orange" onclick="saveSettings()">Bağlan ve Kaydet</button>
+        <button class="btn btn-soft" onclick="hide('settingsModal')">Kapat</button>
+        <button class="btn btn-primary" onclick="saveSettings()">Kaydet ve Bağlan</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Ürün -->
-<div id="productModal" class="overlay hidden" onclick="backdropClose(event,'productModal')">
+<!-- Product modal -->
+<div id="productModal" class="overlay hidden" onclick="closeBackdrop(event,'productModal')">
   <div class="modal">
     <div class="modal-head">
-      <h2 id="productTitle">Ürün</h2>
-      <p>Ürün adı, konumu ve stok miktarını buradan değiştirebilirsin.</p>
+      <h2 id="productModalTitle">Ürün</h2>
+      <p>Ürün adı, konumu ve stok miktarını buradan düzenleyebilirsin.</p>
     </div>
     <div class="modal-body">
-      <input type="hidden" id="pId">
-      <div class="field"><label>ÜRÜN ADI</label><input id="pName"></div>
+      <input id="pId" type="hidden">
+
+      <div class="field full">
+        <label>ÜRÜN ADI</label>
+        <input id="pName">
+      </div>
+
       <div class="fields">
         <div class="field"><label>GOU</label><input id="pGou"></div>
         <div class="field"><label>RAF</label><input id="pRaf"></div>
         <div class="field"><label>KUTU</label><input id="pKutu"></div>
         <div class="field"><label>STOK</label><input id="pStock" type="number" step="0.01" min="0"></div>
-        <div class="field"><label>ÖLÇÜ</label><input id="pUnit" placeholder="Adet"></div>
+        <div class="field"><label>ÖLÇÜ TÜRÜ</label><input id="pUnit" placeholder="Adet"></div>
         <div class="field"><label>DURUM</label><input id="pStatus" placeholder="Stokta"></div>
       </div>
-      <div class="setup-box">Fotoğraf için Drive’daki dosyanın adını ürün adıyla aynı yapıp üstteki <b>Drive Fotoğraflarını Eşleştir</b> butonuna bas.</div>
-      <div class="modal-actions" style="justify-content:space-between">
-        <button id="deleteButton" class="btn danger hidden" onclick="deleteProduct()">Ürünü Sil</button>
+
+      <div class="info-box">
+        Fotoğraf için Drive’daki dosyanın adını ürün adıyla aynı yap. Sonra ana ekrandaki <b>Fotoğrafları Eşleştir</b> butonuna bas.
+      </div>
+
+      <div class="modal-actions split">
+        <button id="deleteProductButton" class="btn btn-danger hidden" onclick="deleteProduct()">Ürünü Sil</button>
         <div style="display:flex;gap:8px;margin-left:auto">
-          <button class="btn soft" onclick="hide('productModal')">Vazgeç</button>
-          <button class="btn orange" onclick="saveProduct()">Kaydet</button>
+          <button class="btn btn-soft" onclick="hide('productModal')">Vazgeç</button>
+          <button class="btn btn-primary" onclick="saveProduct()">Kaydet</button>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Hareketler -->
-<div id="logsModal" class="overlay hidden" onclick="backdropClose(event,'logsModal')">
+<!-- Logs -->
+<div id="logsModal" class="overlay hidden" onclick="closeBackdrop(event,'logsModal')">
   <div class="modal">
     <div class="modal-head">
       <h2>Son Stok Hareketleri</h2>
@@ -231,7 +465,7 @@ select{height:46px;border:1px solid var(--line);border-radius:13px;background:#f
     </div>
     <div class="modal-body">
       <div id="logs" class="log-list"></div>
-      <div class="modal-actions"><button class="btn soft" onclick="hide('logsModal')">Kapat</button></div>
+      <div class="modal-actions"><button class="btn btn-soft" onclick="hide('logsModal')">Kapat</button></div>
     </div>
   </div>
 </div>
@@ -239,228 +473,395 @@ select{height:46px;border:1px solid var(--line);border-radius:13px;background:#f
 <script>
 const DRIVE_FOLDER_URL = 'https://drive.google.com/drive/folders/1onGehP5Tv3iMq4u1BlJzCaG9gtSE_YDB';
 const PAGE_SIZE = 60;
+const REQUEST_TIMEOUT = 25000;
+
 let products = [];
-let filtered = [];
-let visible = PAGE_SIZE;
-let dbUrl = '';
+let filteredProducts = [];
+let visibleCount = PAGE_SIZE;
+let bridgeReady = false;
+let bridgeUrl = '';
+let requestCounter = 0;
+const pending = new Map();
 
 const $ = id => document.getElementById(id);
-const cfg = () => ({
-  url: localStorage.getItem('atom_backend') || '',
-  pin: localStorage.getItem('atom_pin') || '',
-  actor: localStorage.getItem('atom_actor') || 'Kullanıcı'
-});
 
-function show(id){ $(id).classList.remove('hidden') }
-function hide(id){ $(id).classList.add('hidden') }
-function backdropClose(e,id){ if(e.target.id===id) hide(id) }
-function busy(on,text='Yükleniyor…'){ $('loadingText').textContent=text; $('loading').classList.toggle('hidden',!on) }
-
-function toast(msg,type=''){
-  const d=document.createElement('div');
-  d.className='toast '+type; d.textContent=msg; $('toasts').appendChild(d);
-  setTimeout(()=>d.remove(),2800);
+function cfg(){
+  return {
+    url: localStorage.getItem('atom_backend') || '',
+    pin: localStorage.getItem('atom_pin') || '',
+    actor: localStorage.getItem('atom_actor') || 'Kullanıcı'
+  };
 }
 
-function api(action, params={}){
+function show(id){ $(id).classList.remove('hidden'); }
+function hide(id){ $(id).classList.add('hidden'); }
+function closeBackdrop(e,id){ if(e.target.id===id) hide(id); }
+
+function setBusy(on,text='Yükleniyor…'){
+  $('loadingText').textContent=text;
+  $('loading').classList.toggle('hidden',!on);
+}
+
+function toast(message,type=''){
+  const item=document.createElement('div');
+  item.className='toast '+type;
+  item.textContent=message;
+  $('toasts').appendChild(item);
+  setTimeout(()=>item.remove(),3000);
+}
+
+function setStatus(text,online=false){
+  const el=$('connectionStatus');
+  el.querySelector('span').textContent=text;
+  el.classList.toggle('online',online);
+}
+
+function normalizeBackendUrl(url){
+  url=String(url||'').trim();
+  if(!url) return '';
+  url=url.replace(/\?.*$/,'').replace(/#.*$/,'');
+  if(url.endsWith('/dev')) url=url.slice(0,-4)+'/exec';
+  return url;
+}
+
+function loadBridge(force=false){
   return new Promise((resolve,reject)=>{
     const c=cfg();
-    if(!c.url){ reject(new Error('Önce bağlantı ayarlarını yap.')); return; }
+    const url=normalizeBackendUrl(c.url);
+    if(!url){ reject(new Error('Apps Script URL girilmemiş.')); return; }
 
-    const cb='__atom_cb_'+Date.now()+'_'+Math.floor(Math.random()*100000);
-    const script=document.createElement('script');
-    const q=new URLSearchParams({
-      action, pin:c.pin, actor:c.actor, callback:cb, _t:String(Date.now())
-    });
-    Object.entries(params).forEach(([k,v])=>q.set(k,String(v)));
+    if(bridgeReady && bridgeUrl===url && !force){ resolve(true); return; }
 
-    window[cb]=res=>{
-      cleanup();
-      if(res && res.ok) resolve(res.data);
-      else reject(new Error(res && res.error ? res.error : 'İşlem başarısız.'));
-    };
+    bridgeReady=false;
+    bridgeUrl=url;
+    setStatus('Google bağlantısı kuruluyor…',false);
 
-    function cleanup(){
-      try{ delete window[cb] }catch(e){ window[cb]=undefined }
-      script.remove();
-      clearTimeout(timer);
+    const frame=$('bridgeFrame');
+    const timer=setTimeout(()=>{
+      if(!bridgeReady){
+        reject(new Error('Apps Script köprüsü açılmadı. Dağıtım erişimini “Herkes” yap ve /exec adresini kullan.'));
+      }
+    },12000);
+
+    function readyHandler(ev){
+      if(ev.data && ev.data.type==='ATOM_BRIDGE_READY'){
+        clearTimeout(timer);
+        window.removeEventListener('message',readyHandler);
+        bridgeReady=true;
+        setStatus('Online',true);
+        resolve(true);
+      }
     }
 
-    script.onerror=()=>{ cleanup(); reject(new Error('Sunucuya bağlanılamadı. Apps Script adresini kontrol et.')); };
-    const timer=setTimeout(()=>{ cleanup(); reject(new Error('Bağlantı zaman aşımına uğradı.')); },20000);
+    window.addEventListener('message',readyHandler);
+    frame.src='about:blank';
+    setTimeout(()=>{ frame.src=url+'?v='+Date.now(); },50);
+  });
+}
 
-    script.src=c.url.replace(/\/+$/,'')+'?'+q.toString();
-    document.body.appendChild(script);
+window.addEventListener('message',ev=>{
+  const m=ev.data;
+  if(!m || m.type!=='ATOM_RESPONSE' || !m.requestId) return;
+
+  const p=pending.get(m.requestId);
+  if(!p) return;
+
+  clearTimeout(p.timer);
+  pending.delete(m.requestId);
+
+  if(m.ok) p.resolve(m.data);
+  else p.reject(new Error(m.error || 'İşlem başarısız.'));
+});
+
+async function api(action,payload={}){
+  await loadBridge();
+
+  return new Promise((resolve,reject)=>{
+    const id='r'+Date.now()+'_'+(++requestCounter);
+    const c=cfg();
+
+    const timer=setTimeout(()=>{
+      pending.delete(id);
+      reject(new Error('Sunucu yanıt vermedi. Apps Script dağıtımını ve internet bağlantısını kontrol et.'));
+    },REQUEST_TIMEOUT);
+
+    pending.set(id,{resolve,reject,timer});
+
+    $('bridgeFrame').contentWindow.postMessage({
+      type:'ATOM_REQUEST',
+      requestId:id,
+      action,
+      payload,
+      pin:c.pin,
+      actor:c.actor
+    },'*');
   });
 }
 
 async function boot(){
   const c=cfg();
-  $('backendUrl').value=c.url; $('pin').value=c.pin; $('actor').value=c.actor==='Kullanıcı'?'':c.actor;
+  $('backendUrl').value=c.url;
+  $('pin').value=c.pin;
+  $('actor').value=c.actor==='Kullanıcı'?'':c.actor;
+
   if(!c.url || !c.pin){
+    setStatus('Kurulum gerekli',false);
     show('settingsModal');
-    renderEmpty('İlk kullanım için bağlantı bilgilerini kaydet.');
+    renderEmpty('İlk kullanım için bağlantı ayarlarını kaydet.');
     return;
   }
-  await refresh();
+
+  try{
+    await loadBridge();
+    await refresh();
+  }catch(e){
+    setStatus('Bağlantı yok',false);
+    renderEmpty(e.message);
+    toast(e.message,'error');
+    show('settingsModal');
+  }
 }
 
-async function saveSettings(){
-  const url=$('backendUrl').value.trim();
+async function testConnection(){
+  const url=normalizeBackendUrl($('backendUrl').value);
   const pin=$('pin').value.trim();
   const actor=$('actor').value.trim() || 'Kullanıcı';
-  if(!url || !pin){ toast('Web uygulaması adresi ve PIN gerekli.','error'); return; }
+
+  const result=$('testResult');
+  result.className='test-result';
+  result.classList.remove('hidden');
+
+  if(!url){
+    result.classList.add('bad');
+    result.textContent='Apps Script /exec adresini gir.';
+    return;
+  }
 
   localStorage.setItem('atom_backend',url);
   localStorage.setItem('atom_pin',pin);
   localStorage.setItem('atom_actor',actor);
 
-  busy(true,'Bağlantı kontrol ediliyor…');
   try{
-    const info=await api('ping');
+    setBusy(true,'Bağlantı test ediliyor…');
+    await loadBridge(true);
+    const r=await api('ping');
+    result.classList.add('ok');
+    result.textContent='Bağlantı başarılı. '+r.count+' ürün bulundu. Drive: '+r.photoFolderName;
+    setStatus('Online',true);
+  }catch(e){
+    result.classList.add('bad');
+    result.textContent=e.message;
+    setStatus('Bağlantı yok',false);
+  }finally{
+    setBusy(false);
+  }
+}
+
+async function saveSettings(){
+  const url=normalizeBackendUrl($('backendUrl').value);
+  const pin=$('pin').value.trim();
+  const actor=$('actor').value.trim() || 'Kullanıcı';
+
+  if(!url || !pin){
+    toast('Apps Script URL ve PIN gerekli.','error');
+    return;
+  }
+
+  localStorage.setItem('atom_backend',url);
+  localStorage.setItem('atom_pin',pin);
+  localStorage.setItem('atom_actor',actor);
+
+  try{
+    setBusy(true,'Bağlantı kuruluyor…');
+    await loadBridge(true);
+    await api('ping');
     hide('settingsModal');
-    toast('Bağlantı hazır. '+info.count+' ürün bulundu.');
+    toast('Bağlantı hazır.','success');
     await refresh();
   }catch(e){
     toast(e.message,'error');
-  }finally{ busy(false) }
+  }finally{
+    setBusy(false);
+  }
 }
 
 function openSettings(){
   const c=cfg();
-  $('backendUrl').value=c.url; $('pin').value=c.pin; $('actor').value=c.actor==='Kullanıcı'?'':c.actor;
+  $('backendUrl').value=c.url;
+  $('pin').value=c.pin;
+  $('actor').value=c.actor==='Kullanıcı'?'':c.actor;
+  $('testResult').className='test-result hidden';
   show('settingsModal');
 }
 
 async function refresh(){
-  busy(true,'Stoklar getiriliyor…');
+  setBusy(true,'Stoklar getiriliyor…');
   try{
     const data=await api('list');
     products=data.products||[];
-    dbUrl=data.dbUrl||'';
-    $('sProducts').textContent=formatNum(data.stats.products);
-    $('sUnits').textContent=formatNum(data.stats.units);
-    $('sLow').textContent=formatNum(data.stats.low);
-    $('sEmpty').textContent=formatNum(data.stats.empty);
+
+    $('statProducts').textContent=nfmt(data.stats.products);
+    $('statUnits').textContent=nfmt(data.stats.units);
+    $('statLow').textContent=nfmt(data.stats.low);
+    $('statEmpty').textContent=nfmt(data.stats.empty);
+    $('statPhotos').textContent=nfmt(data.stats.photos);
+
+    setStatus('Online',true);
     applyFilters();
-    document.querySelectorAll('.dot').forEach(x=>x.classList.add('on'));
   }catch(e){
+    setStatus('Bağlantı yok',false);
     renderEmpty(e.message);
     toast(e.message,'error');
-  }finally{ busy(false) }
+  }finally{
+    setBusy(false);
+  }
 }
 
 function applyFilters(){
   const q=normalize($('search').value);
-  const f=$('filter').value;
-  const s=$('sort').value;
+  const filter=$('filter').value;
+  const sort=$('sort').value;
 
-  filtered=products.filter(p=>{
+  filteredProducts=products.filter(p=>{
     const hit=!q || normalize([p.urun,p.gou,p.raf,p.kutu,p.durum].join(' ')).includes(q);
     if(!hit) return false;
-    if(f==='instock') return p.stok>5;
-    if(f==='low') return p.stok>0 && p.stok<=5;
-    if(f==='empty') return p.stok<=0;
-    if(f==='photo') return !p.photoUrl;
+
+    if(filter==='instock') return Number(p.stok)>5;
+    if(filter==='low') return Number(p.stok)>0 && Number(p.stok)<=5;
+    if(filter==='empty') return Number(p.stok)<=0;
+    if(filter==='photo') return !p.photoUrl;
     return true;
   });
 
-  if(s==='stockasc') filtered.sort((a,b)=>a.stok-b.stok || a.urun.localeCompare(b.urun,'tr'));
-  else if(s==='stockdesc') filtered.sort((a,b)=>b.stok-a.stok || a.urun.localeCompare(b.urun,'tr'));
-  else filtered.sort((a,b)=>a.urun.localeCompare(b.urun,'tr'));
+  if(sort==='stockasc') filteredProducts.sort((a,b)=>a.stok-b.stok || a.urun.localeCompare(b.urun,'tr'));
+  else if(sort==='stockdesc') filteredProducts.sort((a,b)=>b.stok-a.stok || a.urun.localeCompare(b.urun,'tr'));
+  else filteredProducts.sort((a,b)=>a.urun.localeCompare(b.urun,'tr'));
 
-  visible=PAGE_SIZE;
-  render();
+  visibleCount=PAGE_SIZE;
+  renderProducts();
 }
 
-function render(){
-  const list=filtered.slice(0,visible);
-  if(!list.length){ renderEmpty('Aradığın ürünü bulamadım.'); return; }
+function renderProducts(){
+  const list=filteredProducts.slice(0,visibleCount);
+  const grid=$('productGrid');
 
-  $('grid').innerHTML=list.map(p=>{
-    const state=p.stok<=0?'empty':p.stok<=5?'low':'ok';
-    const stateText=p.stok<=0?'Tükendi':p.stok<=5?'Kritik':'Stokta';
-    const loc=[
-      p.gou?`GOU ${esc(p.gou)}`:'',
-      p.raf?`Raf ${esc(p.raf)}`:'',
-      p.kutu?`Kutu ${esc(p.kutu)}`:''
-    ].filter(Boolean).map(x=>`<span class="tag">${x}</span>`).join('');
+  if(!list.length){
+    renderEmpty('Aradığın ürünü bulamadım.');
+    return;
+  }
+
+  grid.innerHTML=list.map(p=>{
+    const stock=Number(p.stok||0);
+    const state=stock<=0?'empty':stock<=5?'low':'ok';
+    const stateText=stock<=0?'TÜKENDİ':stock<=5?'KRİTİK':'STOKTA';
+
+    const chips=[
+      p.gou ? 'GOU '+esc(p.gou) : '',
+      p.raf ? 'Raf '+esc(p.raf) : '',
+      p.kutu ? 'Kutu '+esc(p.kutu) : ''
+    ].filter(Boolean).map(x=>`<span class="meta-chip">${x}</span>`).join('');
 
     const photo=p.photoUrl
-      ? `<img loading="lazy" src="${escAttr(p.photoUrl)}" alt="${escAttr(p.urun)}" onerror="photoFail(this)">`
-      : `<div class="no-photo"><b>◫</b>Fotoğraf yok</div>`;
+      ? `<img loading="lazy" src="${attr(p.photoUrl)}" alt="${attr(p.urun)}" onerror="photoError(this)">`
+      : `<div class="photo-empty">
+           <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><rect x="3" y="4" width="18" height="16" rx="2"></rect><circle cx="9" cy="10" r="2"></circle><path d="m21 15-5-5L5 20"></path></svg>
+           Fotoğraf yok
+         </div>`;
 
-    return `<article class="card" data-id="${escAttr(p.id)}">
-      <div class="photo">${photo}<span class="badge ${state}">${stateText}</span></div>
+    return `<article class="product-card">
+      <div class="photo">
+        ${photo}
+        <span class="badge ${state}">${stateText}</span>
+      </div>
       <div class="card-body">
         <div class="product-name">${esc(p.urun)}</div>
-        <div class="location">${loc || '<span class="tag">Konum yok</span>'}</div>
-        <div class="stock-line">
-          <div class="stock-num"><strong id="stock_${cssSafe(p.id)}">${formatNum(p.stok)}</strong><span>${esc(p.olcu||'')}</span></div>
-          <div class="counter">
-            <button class="count-btn minus" onclick="adjust('${jsq(p.id)}',-1)" aria-label="Stok düş">−</button>
-            <button class="count-btn plus" onclick="adjust('${jsq(p.id)}',1)" aria-label="Stok ekle">+</button>
+        <div class="meta">${chips || '<span class="meta-chip">Konum bilgisi yok</span>'}</div>
+
+        <div class="stock-row">
+          <div class="stock-value">
+            <strong>${nfmt(stock)}</strong>
+            <span>${esc(p.olcu||'')}</span>
+          </div>
+          <div class="stock-controls">
+            <button class="stock-btn minus" onclick="adjustStock('${js(p.id)}',-1)" title="Stoktan düş">−</button>
+            <button class="stock-btn plus" onclick="adjustStock('${js(p.id)}',1)" title="Stok ekle">＋</button>
           </div>
         </div>
-        <button class="edit-btn" onclick="openProduct('${jsq(p.id)}')">Düzenle</button>
+
+        <div class="card-actions">
+          <button class="btn btn-soft" onclick="adjustStock('${js(p.id)}',-5)">−5</button>
+          <button class="btn btn-white" onclick="openProduct('${js(p.id)}')">Düzenle</button>
+          <button class="btn btn-soft" onclick="adjustStock('${js(p.id)}',5)">+5</button>
+        </div>
       </div>
     </article>`;
   }).join('');
 
-  $('moreWrap').classList.toggle('hidden',visible>=filtered.length);
+  $('moreWrap').classList.toggle('hidden',visibleCount>=filteredProducts.length);
 }
 
-function renderEmpty(msg){
-  $('grid').innerHTML=`<div class="empty-state"><b>${esc(msg)}</b></div>`;
+function renderEmpty(message){
+  $('productGrid').innerHTML=`<div class="empty-state"><b>${esc(message)}</b></div>`;
   $('moreWrap').classList.add('hidden');
 }
 
-function showMore(){ visible+=PAGE_SIZE; render() }
+function showMore(){
+  visibleCount+=PAGE_SIZE;
+  renderProducts();
+}
 
-async function adjust(id,delta){
-  const p=products.find(x=>x.id===id); if(!p) return;
-  const old=p.stok;
-  p.stok=Math.max(0,Number(p.stok||0)+delta);
+async function adjustStock(id,delta){
+  const p=products.find(x=>x.id===id);
+  if(!p) return;
+
+  const old=Number(p.stok||0);
+  const optimistic=Math.max(0,old+delta);
+  p.stok=optimistic;
+  updateStatsLocal();
   applyFilters();
 
   try{
     const r=await api('adjust',{id,delta});
-    p.stok=r.stok;
-    p.durum=r.durum;
-    refreshStatsLocal();
+    p.stok=Number(r.stok||0);
+    p.durum=r.durum||p.durum;
+    updateStatsLocal();
     applyFilters();
-    toast(delta>0 ? 'Stok eklendi.' : 'Stok düşüldü.');
+    toast(delta>0 ? `${Math.abs(delta)} stok eklendi.` : `${Math.abs(delta)} stok düşüldü.`,'success');
   }catch(e){
     p.stok=old;
+    updateStatsLocal();
     applyFilters();
     toast(e.message,'error');
   }
 }
 
-function refreshStatsLocal(){
-  $('sProducts').textContent=formatNum(products.length);
-  $('sUnits').textContent=formatNum(products.reduce((s,p)=>s+Number(p.stok||0),0));
-  $('sLow').textContent=formatNum(products.filter(p=>p.stok>0&&p.stok<=5).length);
-  $('sEmpty').textContent=formatNum(products.filter(p=>p.stok<=0).length);
+function updateStatsLocal(){
+  $('statProducts').textContent=nfmt(products.length);
+  $('statUnits').textContent=nfmt(products.reduce((s,p)=>s+Number(p.stok||0),0));
+  $('statLow').textContent=nfmt(products.filter(p=>p.stok>0 && p.stok<=5).length);
+  $('statEmpty').textContent=nfmt(products.filter(p=>p.stok<=0).length);
+  $('statPhotos').textContent=nfmt(products.filter(p=>p.photoUrl).length);
 }
 
 function openProduct(id=''){
-  const p=id?products.find(x=>x.id===id):null;
-  $('productTitle').textContent=p?'Ürünü Düzenle':'Yeni Ürün';
-  $('pId').value=p?p.id:'';
-  $('pName').value=p?p.urun:'';
-  $('pGou').value=p?p.gou:'';
-  $('pRaf').value=p?p.raf:'';
-  $('pKutu').value=p?p.kutu:'';
-  $('pStock').value=p?p.stok:0;
-  $('pUnit').value=p?p.olcu:'Adet';
-  $('pStatus').value=p?p.durum:'Stokta';
-  $('deleteButton').classList.toggle('hidden',!p);
+  const p=id ? products.find(x=>x.id===id) : null;
+
+  $('productModalTitle').textContent=p ? 'Ürünü Düzenle' : 'Yeni Ürün';
+  $('pId').value=p ? p.id : '';
+  $('pName').value=p ? p.urun : '';
+  $('pGou').value=p ? p.gou : '';
+  $('pRaf').value=p ? p.raf : '';
+  $('pKutu').value=p ? p.kutu : '';
+  $('pStock').value=p ? p.stok : 0;
+  $('pUnit').value=p ? p.olcu : 'Adet';
+  $('pStatus').value=p ? p.durum : 'Stokta';
+
+  $('deleteProductButton').classList.toggle('hidden',!p);
   show('productModal');
 }
 
 async function saveProduct(){
-  const p={
+  const payload={
     id:$('pId').value,
     urun:$('pName').value.trim(),
     gou:$('pGou').value.trim(),
@@ -470,67 +871,100 @@ async function saveProduct(){
     olcu:$('pUnit').value.trim(),
     durum:$('pStatus').value.trim()
   };
-  if(!p.urun){ toast('Ürün adı gerekli.','error'); return; }
 
-  busy(true,'Kaydediliyor…');
+  if(!payload.urun){
+    toast('Ürün adı gerekli.','error');
+    return;
+  }
+
+  setBusy(true,'Ürün kaydediliyor…');
   try{
-    if(p.id) await api('save',{payload:JSON.stringify(p)});
-    else await api('add',{payload:JSON.stringify(p)});
+    if(payload.id) await api('save',payload);
+    else await api('add',payload);
+
     hide('productModal');
-    toast('Ürün kaydedildi.');
+    toast('Ürün kaydedildi.','success');
     await refresh();
-  }catch(e){ toast(e.message,'error') }
-  finally{ busy(false) }
+  }catch(e){
+    toast(e.message,'error');
+  }finally{
+    setBusy(false);
+  }
 }
 
 async function deleteProduct(){
   const id=$('pId').value;
-  if(!id || !confirm('Bu ürünü silmek istediğine emin misin?')) return;
-  busy(true,'Ürün siliniyor…');
+  if(!id) return;
+  if(!confirm('Bu ürünü silmek istediğine emin misin?')) return;
+
+  setBusy(true,'Ürün siliniyor…');
   try{
     await api('delete',{id});
-    hide('productModal'); toast('Ürün silindi.'); await refresh();
-  }catch(e){ toast(e.message,'error') }
-  finally{ busy(false) }
+    hide('productModal');
+    toast('Ürün silindi.','success');
+    await refresh();
+  }catch(e){
+    toast(e.message,'error');
+  }finally{
+    setBusy(false);
+  }
 }
 
 async function syncPhotos(){
-  if(!cfg().url){ openSettings(); return }
-  busy(true,'Drive fotoğrafları eşleştiriliyor…');
   try{
+    setBusy(true,'Drive fotoğrafları eşleştiriliyor…');
     const r=await api('sync_photos');
-    let msg=`${r.matched} fotoğraf ürünlerle eşleşti.`;
-    if(r.unmatched && r.unmatched.length) msg+=` ${r.unmatched.length} dosya adı eşleşmedi.`;
-    toast(msg);
+    const unmatched=(r.unmatched||[]).length;
+    toast(`${r.matched} fotoğraf eşleşti${unmatched ? `, ${unmatched} dosya eşleşmedi` : ''}.`,'success');
     await refresh();
-  }catch(e){ toast(e.message,'error') }
-  finally{ busy(false) }
+  }catch(e){
+    toast(e.message,'error');
+  }finally{
+    setBusy(false);
+  }
 }
 
 async function showLogs(){
-  busy(true,'Hareketler getiriliyor…');
   try{
+    setBusy(true,'Hareketler getiriliyor…');
     const logs=await api('recent',{limit:50});
-    $('logs').innerHTML=logs.length?logs.map(x=>`
+
+    $('logs').innerHTML=logs.length ? logs.map(x=>`
       <div class="log-item">
-        <div class="log-top"><span>${esc(dateTR(x.tarih))}</span><span>${esc(x.kullanici||'Kullanıcı')}</span></div>
+        <div class="log-top">
+          <span>${esc(dateTR(x.tarih))}</span>
+          <span>${esc(x.kullanici||'Kullanıcı')}</span>
+        </div>
         <b>${esc(x.urun)}</b>
-        <small>${esc(x.islem)}${x.miktar?` · ${formatNum(x.miktar)}`:''} · ${formatNum(x.onceki)} → ${formatNum(x.yeni)}</small>
-      </div>`).join(''):'<div class="empty-state">Henüz hareket yok.</div>';
+        <small>${esc(x.islem)}${x.miktar ? ` · ${nfmt(x.miktar)}` : ''} · ${nfmt(x.onceki)} → ${nfmt(x.yeni)}</small>
+      </div>
+    `).join('') : '<div class="empty-state">Henüz stok hareketi yok.</div>';
+
     show('logsModal');
-  }catch(e){ toast(e.message,'error') }
-  finally{ busy(false) }
+  }catch(e){
+    toast(e.message,'error');
+  }finally{
+    setBusy(false);
+  }
 }
 
-function openDrive(){ window.open(DRIVE_FOLDER_URL,'_blank','noopener') }
-function photoFail(img){ img.outerHTML='<div class="no-photo"><b>◫</b>Fotoğraf açılamadı</div>' }
+function openDrive(){
+  window.open(DRIVE_FOLDER_URL,'_blank','noopener');
+}
+
+function photoError(img){
+  img.outerHTML=`<div class="photo-empty">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="m4 4 16 16"></path></svg>
+    Fotoğraf açılamadı
+  </div>`;
+}
+
+function nfmt(n){ return Number(n||0).toLocaleString('tr-TR',{maximumFractionDigits:2}); }
 function dateTR(v){ try{return new Date(v).toLocaleString('tr-TR',{dateStyle:'short',timeStyle:'short'})}catch(e){return ''} }
-function formatNum(n){ return Number(n||0).toLocaleString('tr-TR',{maximumFractionDigits:2}) }
-function normalize(s){ return String(s||'').toLocaleLowerCase('tr-TR').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/ı/g,'i').replace(/[^a-z0-9]+/g,' ').trim() }
-function cssSafe(s){ return String(s).replace(/[^A-Za-z0-9_-]/g,'_') }
-function jsq(s){ return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'") }
-function esc(s){ return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c])) }
-function escAttr(s){ return esc(s).replace(/`/g,'&#096;') }
+function normalize(s){ return String(s||'').toLocaleLowerCase('tr-TR').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/ı/g,'i').replace(/[^a-z0-9]+/g,' ').trim(); }
+function esc(s){ return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c])); }
+function attr(s){ return esc(s).replace(/`/g,'&#096;'); }
+function js(s){ return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
 
 boot();
 </script>
